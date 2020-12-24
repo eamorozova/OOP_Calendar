@@ -7,5 +7,4 @@ interface Communicator {
     fun sendInput(clickedDate: GregorianCalendar)
 
     fun sendEvent(title: String, date: GregorianCalendar, note: String)
-
 }

@@ -4,40 +4,28 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragmaent_events_recycler_view.*
+import java.lang.reflect.Type
 import java.util.*
 
 class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
 
+    private val gson = Gson()
+    private val type: Type = object : TypeToken<MutableList<EventItem>>() {}.type
+
     private lateinit var eventsRecyclerViewAdapter: EventsRecyclerViewAdapter
-
-    val example = mutableListOf<EventItem>(
-        EventItem("Go out", GregorianCalendar(2060, 11, 1), "eeee"),
-        EventItem("Finik", GregorianCalendar(2020, 11, 2), "eeee"),
-        EventItem("Go out", GregorianCalendar(2080, 11, 2), "eeee"),
-        EventItem("Loloped", GregorianCalendar(2000, 11, 20), "eeee"),
-        EventItem("Go out", GregorianCalendar(2000, 11, 22), "eeee"),
-        EventItem("Came here", GregorianCalendar(2000, 11, 21), "eeee"),
-        EventItem("Go out", GregorianCalendar(2000, 11, 1), "eeee"),
-        EventItem("Finik", GregorianCalendar(2000, 11, 2), "eeee"),
-        EventItem("Go out", GregorianCalendar(2000, 8, 2), "eeee"),
-        EventItem("Loloped", GregorianCalendar(2000, 11, 20), "eeee"),
-        EventItem("Go out", GregorianCalendar(2000, 11, 22), "eeee"),
-        EventItem("Came here", GregorianCalendar(200, 11, 21), "eeee"),
-        EventItem("Go out", GregorianCalendar(2000, 11, 1), "eeee"),
-        EventItem("Finik", GregorianCalendar(2010, 11, 2), "eeee"),
-        EventItem("Go out", GregorianCalendar(2020, 11, 2), "eeee"),
-        EventItem("Loloped", GregorianCalendar(2020, 11, 20), "eeee"),
-        EventItem("Go out", GregorianCalendar(2020, 11, 22), "eeee"),
-        EventItem("Came here", GregorianCalendar(2020, 11, 21), "eeee")
-    )
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-        eventsRecyclerViewAdapter.submitList(example)
+
+        val string = EventReader().readFromFile(context!!, "events.json")
+        val eve = gson.fromJson<MutableList<EventItem>>(string, type)
+
+        eventsRecyclerViewAdapter.submitList(eve)
 
         if (arguments?.containsKey("input") == true) {
             val clickedDate = arguments?.getSerializable("input") as GregorianCalendar
@@ -53,6 +41,8 @@ class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
             if (title != null && notes != null) {
                 val newEvent = EventItem(title, date, notes)
                 eventsRecyclerViewAdapter.addEvent(newEvent)
+                val jsonString = gson.toJson(eventsRecyclerViewAdapter.getEventList())
+                EventReader().writeToFile(context!!, "events.json", jsonString)
             }
         }
     }

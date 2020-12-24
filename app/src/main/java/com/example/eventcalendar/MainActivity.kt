@@ -1,7 +1,8 @@
 package com.example.eventcalendar
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -18,10 +19,10 @@ class MainActivity : AppCompatActivity(), Communicator {
         setFragment(calendarView)
 
         bottomNavigationView.background = null
-        bottomNavigationView.menu.getItem(1).isEnabled = false
+        bottomNavigationView.menu.getItem(2).isEnabled = false
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.menu_calendar -> setFragment(calendarView)
                 R.id.menu_events -> setFragment(eventsRecyclerView)
             }
@@ -29,18 +30,18 @@ class MainActivity : AppCompatActivity(), Communicator {
         }
 
         fab.setOnClickListener {
-            bottomAppBar.performHide()
-            fab.hide()
             val addEvent = AddEvent()
             setFragment(addEvent)
         }
     }
 
-    private fun setFragment(fragment: Fragment) =
+    private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.base_layout, fragment)
+            addToBackStack(null)
             commit()
         }
+    }
 
     override fun sendInput(clickedDate: GregorianCalendar) {
         val bundle = Bundle()

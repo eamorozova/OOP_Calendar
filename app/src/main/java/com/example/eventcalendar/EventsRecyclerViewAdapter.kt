@@ -9,13 +9,11 @@ import kotlinx.android.synthetic.main.event_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventsRecyclerViewAdapter:
-    RecyclerView.Adapter<EventsRecyclerViewAdapter.EventsViewHolder>(){
+class EventsRecyclerViewAdapter : RecyclerView.Adapter<EventsRecyclerViewAdapter.EventsViewHolder>() {
 
-    private var events: MutableList<EventItem> = mutableListOf()
+    private var events = mutableListOf<EventItem>()
 
-    class EventsViewHolder constructor(itemView: View):
-        RecyclerView.ViewHolder(itemView) {
+    class EventsViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val eventTitle: TextView = itemView.event_text
         private val eventDate: TextView = itemView.event_date
         private val eventYear: TextView = itemView.event_year
@@ -51,13 +49,13 @@ class EventsRecyclerViewAdapter:
         events.sortBy { it.date }
     }
 
-    fun getList(): MutableList<EventItem> {
-        return events
-    }
-
     fun getEventId(date: GregorianCalendar): Int {
         return events.indexOfFirst { eventItem ->
             (eventItem.date == date)
         }
+    }
+
+    fun getEventList(): List<EventItem> {
+        return events
     }
 }
