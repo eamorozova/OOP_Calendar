@@ -1,7 +1,7 @@
 package com.example.eventcalendar
 
-data class EventItem(val title: String, val date: String, val description: String?) {
+data class EventItem(val title: String, val date: String, val notes: String?) {
     override fun toString(): String {
-        return "$title ($description)"
+        return "$title ($notes)"
     }
 }

@@ -27,6 +27,12 @@ class MainActivity : AppCompatActivity(), Communicator {
             true
         }
 
+        fab.setOnClickListener {
+            bottomAppBar.performHide()
+            fab.hide()
+            val addEvent = AddEvent()
+            setFragment(addEvent)
+        }
     }
 
     private fun setFragment(fragment: Fragment) =
@@ -37,16 +43,23 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     override fun sendInput(string: String) {
         val bundle = Bundle()
+
         bundle.putString("input", string)
-
-        val transaction = supportFragmentManager.beginTransaction()
-        val list = EventsRecyclerView()
-        list.arguments = bundle
-
-        transaction.replace(R.id.base_layout, list)
-        //transaction.addToBackStack(null)
-        //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-        transaction.commit()
+        bundleToList(bundle)
     }
 
+    override fun sendEvent(title: String, date: String, note: String) {
+        val bundle = Bundle()
+
+        bundle.putString("title", title)
+        bundle.putString("notes", note)
+        bundle.putString("date", date)
+        bundleToList(bundle)
+    }
+
+    private fun bundleToList(bundle: Bundle) {
+        val list = EventsRecyclerView()
+        list.arguments = bundle
+        setFragment(list)
+    }
 }

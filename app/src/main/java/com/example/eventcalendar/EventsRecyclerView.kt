@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragmaent_events_recycler_view.*
 
 class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
+
     private lateinit var eventsRecyclerViewAdapter: EventsRecyclerViewAdapter
 
     val example = mutableListOf<EventItem>(
@@ -36,10 +37,18 @@ class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
         initRecyclerView()
         eventsRecyclerViewAdapter.submitList(example)
 
-        val date = arguments?.getString("input")
-        if (date != null) {
-            val search = eventsRecyclerViewAdapter.getEventId(date)
+        val searcheddate = arguments?.getString("input")
+        if (searcheddate != null) {
+            val search = eventsRecyclerViewAdapter.getEventId(searcheddate)
             recycler_view.scrollToPosition(search)
+        }
+        val title = arguments?.getString("title")
+        val notes = arguments?.getString("notes")
+        val date = arguments?.getString("date")
+
+        if (title != null && notes != null && date != null) {
+            val newEvent = EventItem(title, date, notes)
+            eventsRecyclerViewAdapter.addEvent(newEvent)
         }
     }
 

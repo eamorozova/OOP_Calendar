@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.event_item.view.*
+import java.util.*
 
 class EventsRecyclerViewAdapter:
-    RecyclerView.Adapter<EventsRecyclerViewAdapter.EventsViewHolder>() {
+    RecyclerView.Adapter<EventsRecyclerViewAdapter.EventsViewHolder>(){
 
-    //private val events: MutableMap<EventItem, Date> = mutableMapOf()
+    //private val events: MutableMap<Date, EventItem> = mutableMapOf()
 
     private var events: MutableList<EventItem> = mutableListOf()
 
@@ -42,7 +43,6 @@ class EventsRecyclerViewAdapter:
         return events.size
     }
 
-
     fun submitList(eventList: MutableList<EventItem>) {
         events = eventList
     }
@@ -60,5 +60,4 @@ class EventsRecyclerViewAdapter:
             (eventItem.date == date)
         }
     }
-
 }
