@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_calendar_view.*
+import java.util.*
 
 class CalendarView : Fragment(R.layout.fragment_calendar_view) {
 
@@ -15,7 +16,7 @@ class CalendarView : Fragment(R.layout.fragment_calendar_view) {
         communicator = activity as Communicator
 
         calendar_view.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            communicator.sendInput("$dayOfMonth.${month + 1}.$year")
+            communicator.sendInput(GregorianCalendar(year, month, dayOfMonth))
         }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_add_event.*
+import java.util.*
 
 class AddEvent: Fragment(R.layout.fragment_add_event) {
 
@@ -12,25 +13,17 @@ class AddEvent: Fragment(R.layout.fragment_add_event) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        submit()
-
-//        communicator = activity as Communicator
-//
-//        val title = title_text.text.toString()
-//        val notes = note_text.text.toString()
-//
-//        val date = "${date_picker.dayOfMonth}.${date_picker.month + 1}.${date_picker.year}"
-//
-//        communicator.sendEvent(title, notes, date)
+        onDoneClicked()
     }
 
-    fun submit() {
+    private fun onDoneClicked() {
         done_button.setOnClickListener {
             communicator = activity as Communicator
             val title = title_text.text.toString()
             val notes = note_text.text.toString()
 
-            val date = "${date_picker.dayOfMonth}.${date_picker.month + 1}.${date_picker.year}"
+            val date = GregorianCalendar(date_picker.year, date_picker.month, date_picker.dayOfMonth)
+
             communicator.sendEvent(title, date, notes)
         }
     }

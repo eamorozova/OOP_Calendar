@@ -1,6 +1,8 @@
 package com.example.eventcalendar
 
-data class EventItem(val title: String, val date: String, val notes: String?) {
+import java.util.*
+
+data class EventItem(val title: String, val date: GregorianCalendar, val notes: String?) {
     override fun toString(): String {
         return "$title ($notes)"
     }

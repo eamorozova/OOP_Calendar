@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity(), Communicator {
 
@@ -41,19 +42,19 @@ class MainActivity : AppCompatActivity(), Communicator {
             commit()
         }
 
-    override fun sendInput(string: String) {
+    override fun sendInput(clickedDate: GregorianCalendar) {
         val bundle = Bundle()
 
-        bundle.putString("input", string)
+        bundle.putSerializable("input", clickedDate)
         bundleToList(bundle)
     }
 
-    override fun sendEvent(title: String, date: String, note: String) {
+    override fun sendEvent(title: String, date: GregorianCalendar, note: String) {
         val bundle = Bundle()
 
         bundle.putString("title", title)
         bundle.putString("notes", note)
-        bundle.putString("date", date)
+        bundle.putSerializable("date", date)
         bundleToList(bundle)
     }
 
