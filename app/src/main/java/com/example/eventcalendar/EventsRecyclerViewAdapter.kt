@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.event_item.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class EventsRecyclerViewAdapter:
     RecyclerView.Adapter<EventsRecyclerViewAdapter.EventsViewHolder>(){
-
-    //private val events: MutableMap<Date, EventItem> = mutableMapOf()
 
     private var events: MutableList<EventItem> = mutableListOf()
 
@@ -23,19 +22,18 @@ class EventsRecyclerViewAdapter:
 
         fun bind(event: EventItem) {
             eventTitle.text = event.title
-            eventDate.text = event.date.subSequence(0, 5)
-            eventYear.text = event.date.subSequence(6, 10)
+            eventDate.text = SimpleDateFormat("dd MMM").format(event.date.time)
+            eventYear.text = SimpleDateFormat("yyyy").format(event.date.time)
         }
-
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsRecyclerViewAdapter.EventsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsViewHolder {
         return EventsViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.event_item, parent, false)
         )
     }
 
-    override fun onBindViewHolder(holder: EventsRecyclerViewAdapter.EventsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: EventsViewHolder, position: Int) {
         holder.bind(events[position])
     }
 
@@ -45,17 +43,19 @@ class EventsRecyclerViewAdapter:
 
     fun submitList(eventList: MutableList<EventItem>) {
         events = eventList
+        events.sortBy { it.date }
     }
 
     fun addEvent(event: EventItem) {
         events.add(event)
+        events.sortBy { it.date }
     }
 
     fun getList(): MutableList<EventItem> {
         return events
     }
 
-    fun getEventId(date: String): Int {
+    fun getEventId(date: GregorianCalendar): Int {
         return events.indexOfFirst { eventItem ->
             (eventItem.date == date)
         }

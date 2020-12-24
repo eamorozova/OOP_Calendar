@@ -1,9 +1,11 @@
 package com.example.eventcalendar
 
+import java.util.*
+
 interface Communicator {
 
-    fun sendInput(string: String)
+    fun sendInput(clickedDate: GregorianCalendar)
 
-    fun sendEvent(title: String, date: String, note: String)
+    fun sendEvent(title: String, date: GregorianCalendar, note: String)
 
 }

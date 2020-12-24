@@ -5,31 +5,33 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragmaent_events_recycler_view.*
+import java.util.*
 
 class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
 
     private lateinit var eventsRecyclerViewAdapter: EventsRecyclerViewAdapter
 
     val example = mutableListOf<EventItem>(
-        EventItem("Go out", "01.09.2000", "eeee"),
-        EventItem("Finik", "01.09.2001", "eeee"),
-        EventItem("Go out", "01.09.2005", "eeee"),
-        EventItem("Loloped", "01.09.2009", "eeee"),
-        EventItem("Go out", "01.09.2020", "eeee"),
-        EventItem("Came here", "01.10.2020", "eeee"),
-        EventItem("Loloped", "01.11.2020", "eeee"),
-        EventItem("Go out", "10.12.2020", "eeee"),
-        EventItem("Came here", "10.12.2020", "eeee"),
-        EventItem("Loloped", "10.01.2021", "eeee"),
-        EventItem("Go out", "01.02.2021", "eeee"),
-        EventItem("Came here", "01.04.2021", "eeee"),
-        EventItem("Loloped", "01.05.2021", "eeee"),
-        EventItem("Go out", "01.09.2022", "eeee"),
-        EventItem("Came here", "01.09.2022", "eeee"),
-        EventItem("Loloped", "01.09.2022", "eeee"),
-        EventItem("Go out", "01.10.2022", "eeee"),
-        EventItem("Came here", "01.12.2022", "eeee")
+        EventItem("Go out", GregorianCalendar(2060, 11, 1), "eeee"),
+        EventItem("Finik", GregorianCalendar(2020, 11, 2), "eeee"),
+        EventItem("Go out", GregorianCalendar(2080, 11, 2), "eeee"),
+        EventItem("Loloped", GregorianCalendar(2000, 11, 20), "eeee"),
+        EventItem("Go out", GregorianCalendar(2000, 11, 22), "eeee"),
+        EventItem("Came here", GregorianCalendar(2000, 11, 21), "eeee"),
+        EventItem("Go out", GregorianCalendar(2000, 11, 1), "eeee"),
+        EventItem("Finik", GregorianCalendar(2000, 11, 2), "eeee"),
+        EventItem("Go out", GregorianCalendar(2000, 8, 2), "eeee"),
+        EventItem("Loloped", GregorianCalendar(2000, 11, 20), "eeee"),
+        EventItem("Go out", GregorianCalendar(2000, 11, 22), "eeee"),
+        EventItem("Came here", GregorianCalendar(200, 11, 21), "eeee"),
+        EventItem("Go out", GregorianCalendar(2000, 11, 1), "eeee"),
+        EventItem("Finik", GregorianCalendar(2010, 11, 2), "eeee"),
+        EventItem("Go out", GregorianCalendar(2020, 11, 2), "eeee"),
+        EventItem("Loloped", GregorianCalendar(2020, 11, 20), "eeee"),
+        EventItem("Go out", GregorianCalendar(2020, 11, 22), "eeee"),
+        EventItem("Came here", GregorianCalendar(2020, 11, 21), "eeee")
     )
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,18 +39,21 @@ class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
         initRecyclerView()
         eventsRecyclerViewAdapter.submitList(example)
 
-        val searcheddate = arguments?.getString("input")
-        if (searcheddate != null) {
-            val search = eventsRecyclerViewAdapter.getEventId(searcheddate)
+        if (arguments?.containsKey("input") == true) {
+            val clickedDate = arguments?.getSerializable("input") as GregorianCalendar
+            val search = eventsRecyclerViewAdapter.getEventId(clickedDate)
             recycler_view.scrollToPosition(search)
         }
-        val title = arguments?.getString("title")
-        val notes = arguments?.getString("notes")
-        val date = arguments?.getString("date")
 
-        if (title != null && notes != null && date != null) {
-            val newEvent = EventItem(title, date, notes)
-            eventsRecyclerViewAdapter.addEvent(newEvent)
+        if (arguments?.containsKey("title") == true && arguments?.containsKey("date") == true) {
+            val title = arguments?.getString("title")
+            val notes = arguments?.getString("notes")
+            val date = arguments?.getSerializable("date") as GregorianCalendar
+
+            if (title != null && notes != null) {
+                val newEvent = EventItem(title, date, notes)
+                eventsRecyclerViewAdapter.addEvent(newEvent)
+            }
         }
     }
 
