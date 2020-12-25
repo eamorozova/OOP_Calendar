@@ -5,19 +5,11 @@
           android:title="Calendar"
           android:icon="@drawable/ic_baseline_calendar_today_24"/>
 
-    <item android:id="@+id/menu_change"
-          android:title="Sync"
-          android:icon="@drawable/ic_baseline_sync_24"/>
-
     <item android:id="@+id/placeholder"
           android:title=""/>
 
     <item android:id="@+id/menu_events"
           android:title="Events"
           android:icon="@drawable/ic_baseline_format_list_bulleted_24"/>
-
-    <item android:id="@+id/menu_search"
-          android:title="Search"
-          android:icon="@drawable/ic_baseline_search_24"/>
 
 </menu>

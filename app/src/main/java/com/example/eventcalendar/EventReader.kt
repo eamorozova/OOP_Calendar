@@ -1,14 +1,21 @@
 package com.example.eventcalendar
 
 import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.lang.reflect.Type
 
 class EventReader {
+    val path = "events.json"
 
-    fun readFromFile(context: Context, path: String): String {
+    private val gson = Gson()
+    private val type: Type = object : TypeToken<MutableList<EventItem>>() {}.type
+
+    fun readFromFile(context: Context): MutableList<EventItem> {
         lateinit var string: String
 
         if (!fileExist(context, path)) {
@@ -23,13 +30,14 @@ class EventReader {
         } else {
             string = BufferedReader(InputStreamReader(context.openFileInput(path))).readLine().toString()
         }
-        return string
+        return gson.fromJson(string, type)
     }
 
-    fun writeToFile(context: Context, path: String, data: String) {
+    fun writeToFile(context: Context, list: List<EventItem>) {
+        val jsonString = gson.toJson(list)
         try {
             val fileOutputStream = context.openFileOutput(path, Context.MODE_PRIVATE)
-            fileOutputStream.write(data.toByteArray())
+            fileOutputStream.write(jsonString.toByteArray())
         } catch (e: IOException) {
             e.printStackTrace()
         }

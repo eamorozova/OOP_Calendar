@@ -3,7 +3,7 @@ package com.example.eventcalendar
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class DateFormatter() {
+open class DateFormatter {
 
     fun formatDate(calendar: Calendar): String {
         val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.US)

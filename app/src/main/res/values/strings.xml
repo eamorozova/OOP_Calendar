@@ -3,4 +3,12 @@
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="title">Title</string>
+    <string name="date">Date: __.__.____</string>
+    <string name="time">Time: __:__</string>
+    <string name="note">Note</string>
+    <string name="day">Day</string>
+    <string name="year">Year</string>
+    <string name="event">Event</string>
 </resources>

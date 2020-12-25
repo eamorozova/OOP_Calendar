@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_event.*
-import java.text.FieldPosition
 import java.util.*
 
 class EventInformation(private val eventItem: EventItem, private val position: Int) : Fragment(R.layout.fragment_event) {
@@ -20,6 +20,9 @@ class EventInformation(private val eventItem: EventItem, private val position: I
 
         super.onViewCreated(view, savedInstanceState)
 
+        activity!!.fab.hide()
+        activity!!.bottomAppBar.performHide()
+
         event_title.isEnabled = false
         event_note.isEnabled = false
 
@@ -30,6 +33,10 @@ class EventInformation(private val eventItem: EventItem, private val position: I
 
         edit_info_button.setOnClickListener {
             setEditableMode()
+        }
+
+        cancel_info_button.setOnClickListener {
+            activity!!.supportFragmentManager.popBackStack()
         }
     }
 
@@ -46,12 +53,19 @@ class EventInformation(private val eventItem: EventItem, private val position: I
         event_time.text = dateFormatter.formatTime(calendar)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity!!.fab.show()
+        activity!!.bottomAppBar.performShow()
+    }
+
     private fun setEditableMode() {
         event_title.isEnabled = true
         event_note.isEnabled = true
 
         cancel_edit_button.visibility = View.VISIBLE
         done_edit_button.visibility = View.VISIBLE
+        delete_button.visibility = View.VISIBLE
 
         cancel_info_button.visibility = View.GONE
         edit_info_button.visibility = View.GONE
@@ -86,8 +100,14 @@ class EventInformation(private val eventItem: EventItem, private val position: I
                 communicator.sendEvent(title, calendar as GregorianCalendar, notes, true, position)
             }
         }
+
         cancel_edit_button.setOnClickListener {
             activity!!.supportFragmentManager.popBackStack()
+        }
+
+        delete_button.setOnClickListener {
+            communicator = activity as Communicator
+            communicator.sendPosition(position)
         }
     }
 }

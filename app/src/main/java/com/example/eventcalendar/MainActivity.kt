@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragmaent_events_recycler_view.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), Communicator {
@@ -18,18 +17,16 @@ class MainActivity : AppCompatActivity(), Communicator {
 
         setFragment(calendarView)
 
-        bottomNavigationView.background = null
-        bottomNavigationView.menu.getItem(2).isEnabled = false
-
-        bottomNavigationView.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.menu_calendar -> setFragment(calendarView)
-                R.id.menu_events -> setFragment(eventsRecyclerView)
-                R.id.menu_search -> {
-                    setFragment(eventsRecyclerView)
+        bottomNavigationView.apply {
+            background = null
+            menu.getItem(1).isEnabled = false
+            setOnNavigationItemSelectedListener {
+                when (it.itemId) {
+                    R.id.menu_calendar -> setFragment(calendarView)
+                    R.id.menu_events -> setFragment(eventsRecyclerView)
                 }
+                true
             }
-            true
         }
 
         fab.setOnClickListener {
@@ -56,13 +53,23 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun sendEvent(title: String, date: GregorianCalendar, note: String, isEdited: Boolean, position: Int?) {
         val bundle = Bundle()
 
-        bundle.putString("title", title)
-        bundle.putString("notes", note)
-        bundle.putSerializable("date", date)
-        bundle.putBoolean("isEdited", isEdited)
-        if (position != null) {
-            bundle.putInt("position", position)
+        bundle.apply {
+            putString("title", title)
+            putString("notes", note)
+            putSerializable("date", date)
+            putBoolean("isEdited", isEdited)
+            if (position != null) {
+                putInt("position", position)
+            }
         }
+
+        bundleToList(bundle)
+    }
+
+    override fun sendPosition(position: Int) {
+        val bundle = Bundle()
+
+        bundle.putInt("position", position)
         bundleToList(bundle)
     }
 

@@ -8,45 +8,45 @@
         android:background="#ffffff">
 
     <LinearLayout
-            android:id="@+id/date"
+            android:id="@+id/item_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/event_text"
+            app:layout_constraintEnd_toStartOf="@+id/item_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
 
         <TextView
-                android:id="@+id/event_date"
+                android:id="@+id/item_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/red"
-                android:contentDescription="Date"
+                android:contentDescription="@string/day"
                 android:textStyle="bold"/>
 
         <TextView
-                android:id="@+id/event_year"
+                android:id="@+id/item_year"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:contentDescription="Year"
+                android:contentDescription="@string/year"
                 android:gravity="center_horizontal"
                 android:textStyle="bold"/>
 
     </LinearLayout>
 
     <TextView
-            android:id="@+id/event_text"
+            android:id="@+id/item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textColor="@color/black"
-            android:text="Event"
+            android:text="@string/event"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/date"
+            app:layout_constraintStart_toEndOf="@+id/item_date"
             app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
