@@ -1,11 +1,12 @@
 package com.example.eventcalendar
 
 import android.os.Bundle
-import android.view.View
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragmaent_events_recycler_view.*
 import java.util.*
 
@@ -14,6 +15,11 @@ class EventsRecyclerView :
     EventsRecyclerViewAdapter.OnEventClickListener {
 
     private lateinit var eventsAdapter: EventsRecyclerViewAdapter
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,17 +32,7 @@ class EventsRecyclerView :
 
         listenInputs()
 
-        recycler_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                eventsAdapter.filter.filter(query)
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                eventsAdapter.filter.filter(newText)
-                return true
-            }
-        })
+        setHasOptionsMenu(true)
     }
 
     private fun initRecyclerView(events: MutableList<EventItem>) {
@@ -56,6 +52,27 @@ class EventsRecyclerView :
             addToBackStack(null)
             commit()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.search_menu, menu)
+
+        val searchView = menu.findItem(R.id.search_view).actionView as SearchView
+
+        searchView.maxWidth = Int.MAX_VALUE
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                eventsAdapter.filter.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                eventsAdapter.filter.filter(newText)
+                return true
+            }
+        })
     }
 
     private fun listenInputs() {

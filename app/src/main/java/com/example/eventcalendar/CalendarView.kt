@@ -1,5 +1,6 @@
 package com.example.eventcalendar
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -12,6 +13,8 @@ class CalendarView : Fragment(R.layout.fragment_calendar_view) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        calendar_view.firstDayOfWeek = Calendar.MONDAY
 
         communicator = activity as Communicator
 

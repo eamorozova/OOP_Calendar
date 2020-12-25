@@ -10,7 +10,7 @@ import java.io.InputStreamReader
 import java.lang.reflect.Type
 
 class EventReader {
-    val path = "events.json"
+    private val path = "events.json"
 
     private val gson = Gson()
     private val type: Type = object : TypeToken<MutableList<EventItem>>() {}.type

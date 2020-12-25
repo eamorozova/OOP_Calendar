@@ -16,7 +16,8 @@
                 android:hint="@string/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:singleLine="true"/>
 
         <TextView
                 android:id="@+id/event_date"
