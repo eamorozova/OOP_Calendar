@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragmaent_events_recycler_view.*
 import java.lang.reflect.Type
 import java.util.*
 
-class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
+class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view), EventsRecyclerViewAdapter.OnEventClickListener {
 
     private val gson = Gson()
     private val type: Type = object : TypeToken<MutableList<EventItem>>() {}.type
@@ -23,9 +23,12 @@ class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
         initRecyclerView()
 
         val string = EventReader().readFromFile(context!!, "events.json")
-        val eve = gson.fromJson<MutableList<EventItem>>(string, type)
+        val jsonEvents = gson.fromJson<MutableList<EventItem>>(string, type)
 
-        eventsRecyclerViewAdapter.submitList(eve)
+        eventsRecyclerViewAdapter.submitList(jsonEvents)
+
+        val currentEvent = eventsRecyclerViewAdapter.getEventId(Calendar.getInstance() as GregorianCalendar)
+        recycler_view.scrollToPosition(currentEvent)
 
         if (arguments?.containsKey("input") == true) {
             val clickedDate = arguments?.getSerializable("input") as GregorianCalendar
@@ -37,12 +40,20 @@ class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
             val title = arguments?.getString("title")
             val notes = arguments?.getString("notes")
             val date = arguments?.getSerializable("date") as GregorianCalendar
+            val isEdited = arguments?.getBoolean("isEdited")
+            val position = arguments?.getInt("position")
 
             if (title != null && notes != null) {
-                val newEvent = EventItem(title, date, notes)
-                eventsRecyclerViewAdapter.addEvent(newEvent)
-                val jsonString = gson.toJson(eventsRecyclerViewAdapter.getEventList())
-                EventReader().writeToFile(context!!, "events.json", jsonString)
+                if (isEdited == true && position != null) {
+                    eventsRecyclerViewAdapter.editEvent(title, date, notes, position)
+                    val jsonString = gson.toJson(eventsRecyclerViewAdapter.getEventList())
+                    EventReader().writeToFile(context!!, "events.json", jsonString)
+                } else {
+                    val newEvent = EventItem(title, date, notes)
+                    eventsRecyclerViewAdapter.addEvent(newEvent)
+                    val jsonString = gson.toJson(eventsRecyclerViewAdapter.getEventList())
+                    EventReader().writeToFile(context!!, "events.json", jsonString)
+                }
             }
         }
     }
@@ -50,8 +61,19 @@ class EventsRecyclerView : Fragment(R.layout.fragmaent_events_recycler_view) {
     private fun initRecyclerView() {
         recycler_view.apply {
             layoutManager = LinearLayoutManager(context)
-            eventsRecyclerViewAdapter = EventsRecyclerViewAdapter()
+            eventsRecyclerViewAdapter = EventsRecyclerViewAdapter(this@EventsRecyclerView)
             adapter = eventsRecyclerViewAdapter
+        }
+    }
+
+    override fun onEventClick(position: Int) {
+        val item = eventsRecyclerViewAdapter.getEventById(position)
+        val eventInformation = EventInformation(item, position)
+
+        activity!!.supportFragmentManager.beginTransaction().apply {
+            replace(R.id.base_layout, eventInformation)
+            addToBackStack(null)
+            commit()
         }
     }
 }

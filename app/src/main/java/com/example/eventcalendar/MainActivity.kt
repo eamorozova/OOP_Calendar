@@ -1,10 +1,10 @@
 package com.example.eventcalendar
 
 import android.os.Bundle
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragmaent_events_recycler_view.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), Communicator {
@@ -25,6 +25,9 @@ class MainActivity : AppCompatActivity(), Communicator {
             when (it.itemId) {
                 R.id.menu_calendar -> setFragment(calendarView)
                 R.id.menu_events -> setFragment(eventsRecyclerView)
+                R.id.menu_search -> {
+                    setFragment(eventsRecyclerView)
+                }
             }
             true
         }
@@ -50,12 +53,16 @@ class MainActivity : AppCompatActivity(), Communicator {
         bundleToList(bundle)
     }
 
-    override fun sendEvent(title: String, date: GregorianCalendar, note: String) {
+    override fun sendEvent(title: String, date: GregorianCalendar, note: String, isEdited: Boolean, position: Int?) {
         val bundle = Bundle()
 
         bundle.putString("title", title)
         bundle.putString("notes", note)
         bundle.putSerializable("date", date)
+        bundle.putBoolean("isEdited", isEdited)
+        if (position != null) {
+            bundle.putInt("position", position)
+        }
         bundleToList(bundle)
     }
 
